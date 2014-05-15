@@ -9,7 +9,7 @@ Reading in the dataset
 activity <- read.csv(unz("activity.zip", "activity.csv"))
 ```
 
-Quick look at the dataset.
+Having a quick look at the dataset.
 
 ```{r echo=TRUE}
 names(activity)
@@ -21,7 +21,7 @@ A histogram of the total number of steps taken each day.
 
 ```{r echo=TRUE}
 day.counts <- aggregate(steps ~ date, data= activity, FUN=sum)
-hist(day.counts$steps, xlab="No. steps", ylab="No. days", 
+hist(day.counts$steps, xlab="Number of steps", ylab="Number of days", 
      main="Histogram of total number of steps taken each day")
 ```
 
@@ -63,11 +63,13 @@ Create a new dataset that is equal to the original dataset with the missing data
 
 
 ```{r echo=TRUE}
+# make a copy
 activity.imputed <- activity
+# set rownames to be intervals so easy to lookup
 rownames(mean.steps.by.interval) <- mean.steps.by.interval$interval
-
+# imput steps with mean steps for that interval
 activity.imputed[is.na(activity.imputed),]$steps <- mean.steps.by.interval[as.character(activity.imputed[which(is.na(activity.imputed)),]$interval),]$steps
-
+# check we have no na values left
 sum(is.na(activity.imputed))
 ```
 
@@ -75,6 +77,7 @@ Histogram of the total number of steps taken each day
 
 
 ```{r echo=TRUE}
+# sum totals for days
 day.counts.imputed <- aggregate(steps ~ date, data= activity.imputed, FUN=sum)
 hist(day.counts2$steps, xlab="Number of steps", ylab="Number of days", main="Histogram of total number of steps taken each day")
 ```
